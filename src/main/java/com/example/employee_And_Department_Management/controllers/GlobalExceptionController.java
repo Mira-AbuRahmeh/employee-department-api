@@ -77,7 +77,7 @@ public class GlobalExceptionController {
         List<String> errors = new ArrayList<>();
         errors.add("Method parameter "+ exception.getParameter().getParameterName()+" failed to convert value type");
         ExceptionResponse response = new ExceptionResponse(
-                "BAD_REQuest",
+                "BAD_REQUEST",
                 "Parameter " + exception.getName() + " must be of type " + exception.getRequiredType().getSimpleName(),
                 LocalDate.now(),
                 errors);
