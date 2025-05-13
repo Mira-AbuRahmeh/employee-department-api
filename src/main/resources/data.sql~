@@ -1,0 +1,44 @@
+
+INSERT INTO Department (name, email, head_id, created_at, created_by, updated_at, updated_by) VALUES
+('HR', 'hr@company.com', NULL, CURRENT_TIMESTAMP, 'admin', NULL, NULL),
+('Engineering', 'eng@company.com', NULL, CURRENT_TIMESTAMP, 'admin', NULL, NULL),
+('Marketing', 'marketing@company.com',  NULL, CURRENT_TIMESTAMP, 'admin', NULL, NULL),
+('Finance', 'finance@company.com',  NULL, CURRENT_TIMESTAMP, 'admin', NULL, NULL),
+('IT Support', 'it@company.com', NULL, CURRENT_TIMESTAMP, 'admin', NULL, NULL),
+('Sales', 'sales@company.com',  NULL, CURRENT_TIMESTAMP, 'admin', NULL, NULL),
+('Logistics', 'logistics@company.com',  NULL, CURRENT_TIMESTAMP, 'admin', NULL, NULL),
+('Legal', 'legal@company.com',  NULL, CURRENT_TIMESTAMP, 'admin', NULL, NULL),
+('Operations', 'ops@company.com', NULL, CURRENT_TIMESTAMP, 'admin', NULL, NULL),
+('R&D', 'rnd@company.com', NULL, CURRENT_TIMESTAMP, 'admin', NULL, NULL);
+
+-- Insert Employees next with NULL department_id
+INSERT INTO Employee (name, role, email, salary, department_id, created_at, created_by, updated_at, updated_by) VALUES
+('Alice Johnson', 'USER', 'alice@company.com', 85000.00, NULL, CURRENT_TIMESTAMP, 'admin', NULL, NULL),
+('Bob Smith', 'USER', 'bob@company.com', 78000.00, NULL, CURRENT_TIMESTAMP, 'admin', NULL, NULL),
+('Clara Davis', 'USER', 'clara@company.com', 72000.00, NULL, CURRENT_TIMESTAMP, 'admin', NULL, NULL),
+('David Lee', 'USER', 'david@company.com', 69000.00, NULL, CURRENT_TIMESTAMP, 'admin', NULL, NULL),
+('Ella Perez','USER', 'ella@company.com', 71000.00, NULL, CURRENT_TIMESTAMP, 'admin', NULL, NULL),
+('Frank Moore', 'USER', 'frank@company.com', 65000.00, NULL, CURRENT_TIMESTAMP, 'admin', NULL, NULL),
+('Grace Kim','USER' , 'grace@company.com', 63000.00, NULL, CURRENT_TIMESTAMP, 'admin', NULL, NULL),
+('Henry Zhang', 'USER', 'henry@company.com', 90000.00, NULL, CURRENT_TIMESTAMP, 'admin', NULL, NULL),
+('Isla Brown', 'USER', 'isla@company.com', 80000.00, NULL, CURRENT_TIMESTAMP, 'admin', NULL, NULL),
+('Jack Wilson', 'ADMIN', 'jack@company.com', 88000.00, NULL, CURRENT_TIMESTAMP, 'admin', NULL, NULL);
+
+-- Now update employees to assign them to their departments (by ID or using subqueries)
+UPDATE Employee SET department_id = 1 WHERE name = 'Alice Johnson';
+UPDATE Employee SET department_id = 1 WHERE name = 'Bob Smith';
+UPDATE Employee SET department_id = 1 WHERE name = 'Clara Davis';
+UPDATE Employee SET department_id = 2 WHERE name = 'David Lee';
+UPDATE Employee SET department_id = 2 WHERE name = 'Ella Perez';
+UPDATE Employee SET department_id = 2 WHERE name = 'Frank Moore';
+UPDATE Employee SET department_id = 3 WHERE name = 'Grace Kim';
+UPDATE Employee SET department_id = 4 WHERE name = 'Henry Zhang';
+UPDATE Employee SET department_id = 3 WHERE name = 'Isla Brown';
+UPDATE Employee SET department_id = 10 WHERE name = 'Jack Wilson';
+
+-- Finally update departments to assign their heads
+UPDATE Department SET head_id = 1 WHERE name = 'HR';
+UPDATE Department SET head_id = 2 WHERE name = 'Engineering';
+UPDATE Department SET head_id = 3 WHERE name = 'Marketing';
+UPDATE Department SET head_id = 4 WHERE name = 'Finance';
+UPDATE Department SET head_id = 5 WHERE name = 'IT Support';

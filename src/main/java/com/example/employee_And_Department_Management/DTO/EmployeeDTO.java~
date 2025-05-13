@@ -1,0 +1,4 @@
+package com.example.employee_And_Department_Management.DTO;
+
+public class EmployeeDTO {
+}
