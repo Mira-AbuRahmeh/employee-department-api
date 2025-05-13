@@ -56,7 +56,7 @@
         <root level="INFO">
             <appender-ref ref="PROD_FILE" />
         </root>
-        <logger name="com.example.employee_And_Department_Management" level="ERROR" additivity="false">
+        <logger name="com.example.employee_And_Department_Management" level="INFO" additivity="false">
             <appender-ref ref="PROD_FILE" />
         </logger>
 
