@@ -12,8 +12,8 @@ import java.util.List;
 public class Department extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name= "department_id")
-    private int departmentId;
+    private int department_Id;
+
 
     @NotBlank(message = "Name must not be blank")
     private String name;
@@ -24,7 +24,7 @@ public class Department extends BaseEntity {
 
     @OneToOne
     @JoinColumn(name="head_id",referencedColumnName = "employee_Id",nullable = true)
-    @JsonIgnoreProperties({"employee_id","role","salary","department"})
+    @JsonIgnoreProperties({"role","salary","department"})
     private  Employee head;
 
     @OneToMany(mappedBy="department")
@@ -45,6 +45,14 @@ public class Department extends BaseEntity {
     public void setEmail(@NotBlank(message = "Email must not be blank") @Email(message = "Please provide a valid email address") String email) {
         this.email = email;
     }
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
+    }
+
 
     public Employee getHead() {
         return head;

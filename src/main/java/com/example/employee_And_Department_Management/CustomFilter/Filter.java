@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 @Component
 public class Filter extends OncePerRequestFilter {
     Logger log = Logger.getLogger(Filter.class.getName());
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("request method: "+request.getMethod()+" url:"+request.getRequestURL()+" Time:"+ LocalDate.now().toString());

@@ -11,13 +11,11 @@ import org.hibernate.annotations.GenericGenerator;
 import java.math.BigDecimal;
 
 @Entity
-@Data
 public class Employee extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name="employee_id")
-    private int employeeId;
+    private int employee_Id;
 
     @NotBlank(message = "Name must not be blank")
     @Size(min=3, message="Name must be at least 3 characters long")
@@ -25,7 +23,9 @@ public class Employee extends BaseEntity {
 
 
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Role must not be null")
     private Role role;
+
 
 
     @NotBlank(message="Email must not be blank")
@@ -33,13 +33,12 @@ public class Employee extends BaseEntity {
     private String email;
 
 
-
     @DecimalMin(value = "0.0",message = "Salary must be greater than 0")
     private BigDecimal salary;
 
     @ManyToOne
     @JoinColumn(name="department_id",referencedColumnName = "department_Id")
-    @JsonIgnoreProperties({"email","head","employees","departmentId"})
+    @JsonIgnoreProperties({"email","head","employees"})
     private Department department;
 
     public @NotBlank(message = "Name must not be blank") @Size(min = 3, message = "Name must be at least 3 characters long") String getName() {
@@ -88,4 +87,3 @@ public class Employee extends BaseEntity {
         ADMIN,
     }
 }
-///////////////role

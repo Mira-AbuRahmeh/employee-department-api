@@ -26,10 +26,12 @@ public class EmployeeServices {
         this.EMPLOYEE_REPO = EMPLOYEE_REPO;
         this.DEPARTMENT_REPO = DEPARTMENT_REPO;
     }
+
     public void addEmployee(Employee employee) {
         EMPLOYEE_REPO.save(employee);
     }
-    @Transactional
+
+
     public void updateEmployee(int id, Employee emp) {
         Optional<Employee> existingEmployee = EMPLOYEE_REPO.findById(id);
         if(existingEmployee.isPresent()) {
@@ -53,6 +55,7 @@ public class EmployeeServices {
     public List<Employee> getAllEmployees() {
         return EMPLOYEE_REPO.findAll();
     }
+
     public Employee getEmployeeById(int id) {
         Optional<Employee> employee = EMPLOYEE_REPO.findById(id);
         if(employee.isPresent())
@@ -94,35 +97,27 @@ public class EmployeeServices {
         Optional< Department> department = DEPARTMENT_REPO.findById(departmentId);
         if(department.isPresent())
             return EMPLOYEE_REPO.findBySalaryGreaterThanEqualAndDepartment(salary, department.get(),sort);
+
         throw new EntityNotFoundException("Department with id " + departmentId + " not found");
     }
 
 
-    public List<Employee> sortEmployees(String sortBy, String order) {
-        Sort sort;
-        if(order!=null && order.equalsIgnoreCase("des"))
-            sort =Sort.by(sortBy).descending();
-        else
-            sort =Sort.by(sortBy).ascending();
-        return  EMPLOYEE_REPO.findAll(sort);
-
-    }
 
     public List<Employee> searchByKeyword(String keyword) {
-        return EMPLOYEE_REPO.findByNameOrEmail(keyword);
+        return EMPLOYEE_REPO.findByNameOrEmailLike(keyword);
     }
 
     public List<Employee> filterEmployees(Integer departmentID, BigDecimal minSalary, String sortBy,String order) {
         List<Employee> filteredList=List.of();
         Sort sort=null;
         if(sortBy!=null && !sortBy.isEmpty() ){
-            if(order!=null && order.equalsIgnoreCase("desc"))
-                sort=Sort.by(sortBy).descending();
-            else
+            if(order!=null && order.equalsIgnoreCase("asc"))
                 sort=Sort.by(sortBy).ascending();
+            else
+                sort=Sort.by(sortBy).descending();
         }
 
-        if(departmentID !=null && minSalary != null ){
+        if(departmentID != null && minSalary != null ){
             filteredList=this.getEmployeesWithSalaryGreaterThanEqualAndDepartment(minSalary,departmentID,sort);
         }
         else if(departmentID != null){
@@ -132,7 +127,7 @@ public class EmployeeServices {
             filteredList=this.getEmployeesWithSalaryGreaterThanEqual(minSalary,sort);
         }
         else if(sort!=null){
-            filteredList=this.sortEmployees(sortBy,order);
+            filteredList=EMPLOYEE_REPO.findAll(sort);
         }
         return filteredList;
     }

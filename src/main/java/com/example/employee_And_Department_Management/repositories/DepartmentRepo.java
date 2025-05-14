@@ -15,9 +15,8 @@ public interface DepartmentRepo extends JpaRepository<Department, Integer> {
 
     @Modifying
     @Transactional
-    @Query("update Department d set d.name=?1 where d.departmentId=?2")
+    @Query("update Department d set d.name=?1 where d.department_Id=?2")
     int updateNameById(String name,int id);
-
 
     Optional<Department> findByHead(Employee head);
 }

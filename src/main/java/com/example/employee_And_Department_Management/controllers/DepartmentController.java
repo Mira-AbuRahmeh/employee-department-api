@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("company/departments")
 public class DepartmentController {
+
     public final DepartmentServices DEPARTMENT_SERVICES;
 
     @Autowired

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class ExceptionResponse {
+
     String status;
     String message;
     LocalDate timeStamp;

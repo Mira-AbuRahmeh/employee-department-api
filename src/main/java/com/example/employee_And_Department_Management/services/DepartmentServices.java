@@ -54,7 +54,7 @@ public class DepartmentServices {
     public void deleteDepartment(int id) {
         Optional<Department> department = DEPARTMENT_REPO.findById(id);
         if(department.isPresent()){
-            List<Employee> employees=EMPLOYEE_REPO.findByDepartment(department.get(),null);
+            List<Employee> employees=department.get().getEmployees();
             employees.forEach(employee ->{
                 employee.setDepartment(null);
                 EMPLOYEE_REPO.save(employee);

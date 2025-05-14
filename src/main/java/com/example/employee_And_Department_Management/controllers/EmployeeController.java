@@ -22,6 +22,7 @@ public class EmployeeController {
     public EmployeeController(EmployeeServices EMPLOYEE_SERVICES) {
         this.EMPLOYEE_SERVICES = EMPLOYEE_SERVICES;
     }
+
     @PostMapping("/add")
     public ResponseEntity<Response> addEmployee(@Valid @RequestBody Employee employee){
         EMPLOYEE_SERVICES.addEmployee(employee);
@@ -67,8 +68,6 @@ public class EmployeeController {
 
     @GetMapping("/filter")
     public List<Employee> filterEmployees(@RequestParam(required = false)Integer depID, @RequestParam(required = false) BigDecimal minSalary, @RequestParam(required = false) String sortBy,@RequestParam(required = false) String order){
-
         return EMPLOYEE_SERVICES.filterEmployees(depID,minSalary,sortBy,order);
-
     }
 }

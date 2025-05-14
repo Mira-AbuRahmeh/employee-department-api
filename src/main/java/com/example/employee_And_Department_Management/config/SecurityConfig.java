@@ -42,33 +42,35 @@ public class SecurityConfig {
                                 "/company/employees/delete/**",
                                 "/company/employees/update/**"
                         ).hasRole("ADMIN")
-
                 )
+
                 .httpBasic(Customizer.withDefaults());
         http.headers(headersConfigurer -> headersConfigurer
                 .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
 
         return http.build();
     }
-@Bean
-public BCryptPasswordEncoder bCryptPasswordEncoder(){
-    return new BCryptPasswordEncoder();
-}
-@Bean
-public UserDetailsService userDetailsService(){
-    UserDetails user = User.builder()
-            .username("user")
-            .password(bCryptPasswordEncoder().encode("1234"))
-            .roles("USER")
-            .build();
 
-    UserDetails admin = User.builder()
-            .username("admin")
-            .password(bCryptPasswordEncoder().encode("1234"))
-            .roles("ADMIN")
-            .build();
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
 
-    return new InMemoryUserDetailsManager(user,admin);
-}
+    @Bean
+    public UserDetailsService userDetailsService(){
+        UserDetails user = User.builder()
+                .username("user")
+                .password(bCryptPasswordEncoder().encode("1234"))
+                .roles("USER")
+                .build();
+
+        UserDetails admin = User.builder()
+                .username("admin")
+                .password(bCryptPasswordEncoder().encode("1234"))
+                .roles("ADMIN")
+                .build();
+
+        return new InMemoryUserDetailsManager(user,admin);
+    }
 }
 

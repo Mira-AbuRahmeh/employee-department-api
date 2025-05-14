@@ -14,18 +14,14 @@ import java.util.Optional;
 @Repository
 public interface EmployeeRepo extends JpaRepository<Employee, Integer> {
 
+    @Query("Select e from Employee e where LOWER(e.name) like lower(CONCAT('%', ?1, '%')) or lower(e.email) like lower(CONCAT('%', ?1, '%'))")
+    List<Employee> findByNameOrEmailLike(String keyword);
 
     List<Employee> findBySalaryGreaterThanEqual(BigDecimal salary, Sort sort);
 
     List<Employee> findByDepartment(Department department,Sort sort);
 
-    @Query("Select e from Employee e where LOWER(e.name) like lower(CONCAT('%', ?1, '%')) or lower(e.email) like lower(CONCAT('%', ?1, '%'))")
-    List<Employee> findByNameOrEmail(String keyword);
-
     List<Employee> findBySalaryGreaterThanEqualAndDepartment(BigDecimal salary, Department department,Sort sort);
-
-
-
 
 
 }
