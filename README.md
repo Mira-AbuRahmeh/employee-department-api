@@ -1,52 +1,62 @@
+keep this here
+
 # 📘 API Documentation
 
 ### 🧾 Table of Contents
 
-1. [Authentication](#authentication)
-2. [Employee APIs](#employee-apis)
-3. [Department APIs](#department-apis)
+1. [Base URL](#base-url)
+2. [Authentication](#authentication)
+3. [Employee APIs](#employee-apis)
+4. [Department APIs](#department-apis)
 
 ---
- Base URL
+
+Base URL
 
 The base URL varies depending on the environment:
 
-| Environment   | Base URL Example                         |
-|---------------|------------------------------------------|
-| Development   | `http://localhost:8080/company`          |
-| Production    | `http://localhost:8081/company`         |
+| Environment | Base URL Example                |
+| ----------- | ------------------------------- |
+| Development | `http://localhost:8080/company` |
+| Production  | `http://localhost:8081/company` |
 
 ---
+
 ### 🔐 Authentication
 
 Most endpoints require authentication.
 
-- **Type**: Basic Auth
-- **For ADMIN role** 
-  - Username: `admin`  
-  - Password: `1234`
-- **For USER Role**
-  - Username: `user`  
-  - Password: `1234`
-- Use tools like **Postman** to set Basic Auth in the **Authorization tab**.
+* **Type**: Basic Auth
+* **For ADMIN role**
+
+  * Username: `admin`
+  * Password: `1234`
+* **For USER Role**
+
+  * Username: `user`
+  * Password: `1234`
+* Use tools like **Postman** to set Basic Auth in the **Authorization tab**.
 
 ---
 
 ### 👤 Employee APIs
 
-#### 📍 POST `/company/employees/add`  
+#### 📍 POST `/company/employees/add`
+
 **Create a new employee**
 
-- **Authentication**: Required with ADMIN role 
-- **Request Header**:
-  - `Content-Type: application/json`
-- **Constraint** :
-  - name and email should not be blank
-  - email should be well-formatd and unique per employee
-  - role should be either ADMIN or USER
-  - All fields are required except department_id.
-  
-- **Request Body**:
+* **Authentication**: Required with ADMIN role
+* **Request Header**:
+
+  * `Content-Type: application/json`
+* **Constraint** :
+
+  * name and email should not be blank
+  * email should be well-formatd and unique per employee
+  * role should be either ADMIN or USER
+  * All fields are required except department\_id.
+* **Request Body**:
+
 ```json
 {
   "name": "John Doe",
@@ -56,17 +66,23 @@ Most endpoints require authentication.
   "department_id":2
 }
 ```
-- **Responses**:
-  - `201 Created`: Employee created successfully.
-    - **Response Body**:
+
+* **Responses**:
+
+  * `201 Created`: Employee created successfully.
+
+    * **Response Body**:
+
     ```json
      {
     "statusCode": "201",
     "statusMsg": "Employee added successfully"
      }
     ```
-  - `400 Bad Request`: Validation failed (e.g., missing required fields or invalid data format).
-    - **Response Body**:
+  * `400 Bad Request`: Validation failed (e.g., missing required fields or invalid data format).
+
+    * **Response Body**:
+
     ```json
     {
     "status": "BAD_REQUEST",
@@ -78,8 +94,10 @@ Most endpoints require authentication.
     ]
     }
     ```
-  - `409 Conflict`: Email already exists in the system (duplicate email).
-    - **Response Body**:
+  * `409 Conflict`: Email already exists in the system (duplicate email).
+
+    * **Response Body**:
+
     ```json
     {
     "status": "CONFLICT",
@@ -90,14 +108,18 @@ Most endpoints require authentication.
     ]
     }
     ```
-### 📍 `GET /company/employees/viewAll`  
+
+### 📍 `GET /company/employees/viewAll`
+
 **Description:** Retrieve a list of all employees.
 
-- **Authentication:** Required  
-- **Response:**
-  - `200 OK`  
-  - Returns: JSON array of employee objects  
-  - Example:
+* **Authentication:** Required
+* **Response:**
+
+  * `200 OK`
+  * Returns: JSON array of employee objects
+  * Example:
+
     ```json
     [
       {
@@ -122,20 +144,23 @@ Most endpoints require authentication.
       }
     ]
     ```
-    
 
 ---
 
-### 📍 `GET /company/employees/view/{id}`  
+### 📍 `GET /company/employees/view/{id}`
+
 **Description:** Get employee details by their ID.
 
-- **Authentication:** Required  
-- **Path Parameters:**
-  - `id` (integer) – Employee ID  
-- **Response:**
-  - `200 OK`  
-  - Returns: JSON object of the employee  
-  - Example:
+* **Authentication:** Required
+* **Path Parameters:**
+
+  * `id` (integer) – Employee ID
+* **Response:**
+
+  * `200 OK`
+  * Returns: JSON object of the employee
+  * Example:
+
     ```json
     {
         "employeeId": 2,
@@ -148,39 +173,48 @@ Most endpoints require authentication.
         }
       }
     ```
-     - `404 Not Found`  : No employee with the specified id
-      - **Response body:**
-      ```json
-      {
-        
-        "status": "NOT FOUND",
-        "message": "Employee with id 90 not found",
-        "timeStamp": "2025-05-13",
-        "errors": [
-            "Entity not found"
-        ]
-      }
-      ```
+
+    * `404 Not Found`  : No employee with the specified id
+    * **Response body:**
+
+    ```json
+    {
+      
+      "status": "NOT FOUND",
+      "message": "Employee with id 90 not found",
+      "timeStamp": "2025-05-13",
+      "errors": [
+          "Entity not found"
+      ]
+    }
+    ```
 
 ---
 
-### 📍 `DELETE /company/employees/delete/{id}`  
+### 📍 `DELETE /company/employees/delete/{id}`
+
 **Description:** Delete an employee by their ID.
 
-- **Authentication:** Required with ADMIN role
-- **Path Parameters:**
-  - `id` (integer) – Employee ID  
-- **Response:**
-  - `200 OK`  
-  - Returns:
+* **Authentication:** Required with ADMIN role
+* **Path Parameters:**
+
+  * `id` (integer) – Employee ID
+* **Response:**
+
+  * `200 OK`
+  * Returns:
+
     ```json
     {
       "statusCode": "200",
       "statusMsg": "Employee deleted successfully"
     }
     ```
-    - `404 Not Found`  : No employee with the specified id
-      - **Response body:**
+
+    * `404 Not Found`  : No employee with the specified id
+
+      * **Response body:**
+
       ```json
       {
         
@@ -195,71 +229,87 @@ Most endpoints require authentication.
 
 ---
 
-### 📍 `PATCH /company/employees/update/{id}`  
+### 📍 `PATCH /company/employees/update/{id}`
+
 **Description:** Update employee information.
 
-- **Authentication:** Required with ADMIN role 
-- **Path Parameters:**
-  - `id` (integer) – Employee ID  
-- **Request Body:** JSON object of updated fields
- 
-    ```json
-    {
-    "name":"Ahmed"
-    }
-    ```
-   
-- **Headers:**
-  - `Content-Type: application/json`  
-- **Response:**
-  - `200 OK`  
-  - Returns:
+* **Authentication:** Required with ADMIN role
+
+* **Path Parameters:**
+
+  * `id` (integer) – Employee ID
+
+* **Request Body:** JSON object of updated fields
+
+  ```json
+  {
+  "name":"Ahmed"
+  }
+  ```
+
+* **Headers:**
+
+  * `Content-Type: application/json`
+
+* **Response:**
+
+  * `200 OK`
+  * Returns:
+
     ```json
     {
       "statusCode": "200",
       "statusMsg": "Employee info updated successfully"
     }
     ```
-     - `400 Bad Request`: Validation failed(e.g. pass an empty name)
 
-- **Response Body:**
- ```json
-  {
-    "status": "BAD_REQUEST",
-    "message": "Request validation failed",
-    "timeStamp": "2025-05-13",
-    "errors": [
-        "Name must not be blank"
-    ]
+    * `400 Bad Request`: Validation failed(e.g. pass an empty name)
+
+* **Response Body:**
+
+```json
+ {
+   "status": "BAD_REQUEST",
+   "message": "Request validation failed",
+   "timeStamp": "2025-05-13",
+   "errors": [
+       "Name must not be blank"
+   ]
 }
 ```
- - `409 Conflict`: duplicate email value.
 
-- **Response Body:**
- ```json
-  {
-    "status": "CONFLICT",
-    "message": "A database error occurred. Please check your input.",
-    "timeStamp": "2025-05-13",
-    "errors": [
-        "Database Integrity Violation"
-    ]
+* `409 Conflict`: duplicate email value.
+
+* **Response Body:**
+
+```json
+ {
+   "status": "CONFLICT",
+   "message": "A database error occurred. Please check your input.",
+   "timeStamp": "2025-05-13",
+   "errors": [
+       "Database Integrity Violation"
+   ]
 }
 ```
 
 ---
 
-### 📍 `GET /company/employees/search/{keyword}`  
+### 📍 `GET /company/employees/search/{keyword}`
+
 **Description:** Search for employees by keyword in name or email.
 
-- **Authentication:** Required  
-- **Path Parameters:**
-  - `keyword` (string) – Name, email 
-- **Response:**
-  - `200 OK`  
-  - Returns: JSON array of matched employees  
-  - Example:
+* **Authentication:** Required
+* **Path Parameters:**
+
+  * `keyword` (string) – Name, email
+* **Response:**
+
+  * `200 OK`
+  * Returns: JSON array of matched employees
+  * Example:
     GET //company/employees/search/Ah
+
     ```json
     [
        {
@@ -277,20 +327,24 @@ Most endpoints require authentication.
 
 ---
 
-### 📍 `GET /company/employees/filter`  
+### 📍 `GET /company/employees/filter`
+
 **Description:** Filter employees using query parameters.
 
-- **Authentication:** Required  
-- **Query Parameters:** *(All optional)*
-  - `depID` (integer): Filter by department ID  
-  - `minSalary` (decimal): Minimum salary  
-  - `sortBy` (string): Field to sort by (e.g., `salary`, `name`)  
-  - `order` (string): `asc` or `desc`  
-- **Response:**
-  - `200 OK`  
-  - Returns: JSON array of filtered/sorted employees  
-  - Example:
-    GET /company/employees/filter?minSalary=80000&sortBy=name&order=desc
+* **Authentication:** Required
+* **Query Parameters:** *(All optional)*
+
+  * `depID` (integer): Filter by department ID
+  * `minSalary` (decimal): Minimum salary
+  * `sortBy` (string): Field to sort by (e.g., `salary`, `name`)
+  * `order` (string): `asc` or `desc`
+* **Response:**
+
+  * `200 OK`
+  * Returns: JSON array of filtered/sorted employees
+  * Example:
+    GET /company/employees/filter?minSalary=80000\&sortBy=name\&order=desc
+
     ```json
     [
      
@@ -326,8 +380,11 @@ Most endpoints require authentication.
     }
     ]
     ```
-    - `400 Bad Request `: Type Mismatch (e.g., passing a string value to minSalary) or Property not found (e.g., passing a not valid property to sortBy)
-      -  Example: /company/employees/filter?minSalary=a800&sortBy=name&order=desc
+
+    * `400 Bad Request `: Type Mismatch (e.g., passing a string value to minSalary) or Property not found (e.g., passing a not valid property to sortBy)
+
+      * Example: /company/employees/filter?minSalary=a800\&sortBy=name\&order=desc
+
       ```json
       {
         "status": "BAD_REQUEST",
@@ -337,42 +394,54 @@ Most endpoints require authentication.
             "Method parameter minSalary failed to convert value type"
         ]
       }
-      
+
       ```
+
 ---
+
 ## 🏢 Department APIs
 
-### 📍 `POST /company/departments/add`  
+### 📍 `POST /company/departments/add`
+
 **Description:** Add a new department.
 
-- **Authentication:** Required with ADMIN role
-- **Headers:**
-  - `Content-Type: application/json`  
-- **Request Body:**
+* **Authentication:** Required with ADMIN role
+* **Headers:**
+
+  * `Content-Type: application/json`
+* **Request Body:**
+
   ```json
   {
     "name": "Engineering",
     "email":"eng@org.com"
   }
   ```
-- **Response:**
-  - `201 Created`: Employee created successfully.
-    - **Response Body**:
+* **Response:**
+
+  * `201 Created`: Employee created successfully.
+
+    * **Response Body**:
+
   ```json
   {
     "statusCode": "201",
     "statusMsg": "Department added successfully"
   }
   ```
-  ## 📍 `GET /company/departments/viewAll`  
+
+  ## 📍 `GET /company/departments/viewAll`
+
 **Description:** Retrieve a list of all departments.
 
-- **Authentication:** Required  
+* **Authentication:** Required
 
-- **Response:**
-  - `200 OK`
+* **Response:**
 
-- **Response Body :**
+  * `200 OK`
+
+* **Response Body :**
+
   ```json
   [
     {
@@ -394,29 +463,37 @@ Most endpoints require authentication.
         }
     },
   ]
+  ```
+
 ---
-## 📍 `GET /company/departments/view/{id}`  
+
+## 📍 `GET /company/departments/view/{id}`
+
 **Description:** Get a specific department by its ID.
 
-- **Authentication:** Required
+* **Authentication:** Required
 
-- **Path Parameters:**
-  - `id` (integer): ID of the department to retrieve
+* **Path Parameters:**
 
-- **Response:**
-  - `200 OK`
+  * `id` (integer): ID of the department to retrieve
 
-- **Response body:**
+* **Response:**
+
+  * `200 OK`
+
+* **Response body:**
+
   ```json
   {
     "id": 1,
     "name": "Engineering"
   }
 
-   ```
+  ```
 
-  - `404 Not Found`  : No department with the specified id
-  - **Response body:**
+  * `404 Not Found`  : No department with the specified id
+  * **Response body:**
+
   ```json
   {
     
@@ -428,27 +505,34 @@ Most endpoints require authentication.
     ]
   }
   ```
+
   ---
-  📍 `DELETE /company/departments/delete/{id}`  
-**Description:** Delete a department by ID.
 
-- **Authentication:** Required
+  📍 `DELETE /company/departments/delete/{id}`
+  **Description:** Delete a department by ID.
 
-- **Path Parameters:**
-  - `id` (integer): ID of the department to delete
+* **Authentication:** Required
 
-- **Response:**
-  - `200 OK`
+* **Path Parameters:**
 
-- **Body:**
+  * `id` (integer): ID of the department to delete
+
+* **Response:**
+
+  * `200 OK`
+
+* **Body:**
+
   ```json
   {
     "statusCode": "200",
     "statusMsg": "Department deleted successfully"
   }
   ```
-   - `404 Not Found`  : No department with the specified id
-  - **Response body:**
+
+  * `404 Not Found`  : No department with the specified id
+  * **Response body:**
+
   ```json
   {
     
@@ -460,71 +544,91 @@ Most endpoints require authentication.
     ]
   }
   ```
+
 ---
-## 📍 `PATCH /company/departments/updateName/{id}`  
+
+## 📍 `PATCH /company/departments/updateName/{id}`
+
 **Description:** Update the name of a specific department.
 
-- **Authentication:** Required
+* **Authentication:** Required
 
-- **Path Parameters:**
-  - `id` (integer): ID of the department to update
+* **Path Parameters:**
 
-- **Headers:**
-  - `Content-Type: application/json`
+  * `id` (integer): ID of the department to update
 
-- **Request Body:**
+* **Headers:**
+
+  * `Content-Type: application/json`
+
+* **Request Body:**
+
   ```json
   {
     "name": "New Name"
   }
-   ```
-  - **Response:**
-  - `200 OK`
+  ```
 
-- **Response Body:**
+  * **Response:**
+  * `200 OK`
+
+* **Response Body:**
+
   ```json
   {
     "statusCode": "200",
     "statusMsg": "Department name updated successfully"
   }
   ```
-  - `400 Bad Request`: Validation failed(e.g. pass an empty name)
 
-- **Response Body:**
- ```json
-  {
-    "status": "BAD_REQUEST",
-    "message": "Request validation failed",
-    "timeStamp": "2025-05-13",
-    "errors": [
-        "Name must not be blank"
-    ]
+  * `400 Bad Request`: Validation failed(e.g. pass an empty name)
+
+* **Response Body:**
+
+```json
+ {
+   "status": "BAD_REQUEST",
+   "message": "Request validation failed",
+   "timeStamp": "2025-05-13",
+   "errors": [
+       "Name must not be blank"
+   ]
 }
 ```
- - `409 Conflict`: Name already exists in the system (duplicate name).
 
-- **Response Body:**
- ```json
-  {
-    "status": "CONFLICT",
-    "message": "A database error occurred. Please check your input.",
-    "timeStamp": "2025-05-13",
-    "errors": [
-        "Database Integrity Violation"
-    ]
+* `409 Conflict`: Name already exists in the system (duplicate name).
+
+* **Response Body:**
+
+```json
+ {
+   "status": "CONFLICT",
+   "message": "A database error occurred. Please check your input.",
+   "timeStamp": "2025-05-13",
+   "errors": [
+       "Database Integrity Violation"
+   ]
 }
 ```
+
 ---
+
 ## How to Run
-  1. Clone the repository or download the source code files.
-  2. Open the project in your preferred Java IDE.
-  3. Run the code using mvn spring-boot:run -Dspring-boot.run.profiles= command to define the active profile (dev,prod)
----
-## Authentication credential for testing purpose
- - **For admin role:**
-    - `username`: admin
-    - `password`: 1234
 
- - **For user role:**
-    - `username`: user
-    - `password`: 1234
+1. Clone the repository or download the source code files.
+2. Open the project in your preferred Java IDE.
+3. Run the code using mvn spring-boot\:run -Dspring-boot.run.profiles= command to define the active profile (dev,prod)
+
+---
+
+## Authentication credential for testing purpose
+
+* **For admin role:**
+
+  * `username`: admin
+  * `password`: 1234
+
+* **For user role:**
+
+  * `username`: user
+  * `password`: 1234
