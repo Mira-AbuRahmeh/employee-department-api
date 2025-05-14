@@ -508,7 +508,7 @@ Most endpoints require authentication.
 
   ---
 
-  📍 `DELETE /company/departments/delete/{id}`
+ ## 📍 `DELETE /company/departments/delete/{id}`
   **Description:** Delete a department by ID.
 
 * **Authentication:** Required
