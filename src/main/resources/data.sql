@@ -28,12 +28,12 @@ INSERT INTO Employee (name, role, email, salary, department_id, created_at, crea
 UPDATE Employee SET department_id = 1 WHERE name = 'Alice Johnson';
 UPDATE Employee SET department_id = 1 WHERE name = 'Bob Smith';
 UPDATE Employee SET department_id = 1 WHERE name = 'Clara Davis';
-UPDATE Employee SET department_id = 2 WHERE name = 'David Lee';
-UPDATE Employee SET department_id = 2 WHERE name = 'Ella Perez';
-UPDATE Employee SET department_id = 2 WHERE name = 'Frank Moore';
-UPDATE Employee SET department_id = 3 WHERE name = 'Grace Kim';
-UPDATE Employee SET department_id = 4 WHERE name = 'Henry Zhang';
-UPDATE Employee SET department_id = 3 WHERE name = 'Isla Brown';
+UPDATE Employee SET department_id = 1 WHERE name = 'David Lee';
+UPDATE Employee SET department_id = 5 WHERE name = 'Ella Perez';
+UPDATE Employee SET department_id = 6 WHERE name = 'Frank Moore';
+UPDATE Employee SET department_id = 7 WHERE name = 'Grace Kim';
+UPDATE Employee SET department_id = 8 WHERE name = 'Henry Zhang';
+UPDATE Employee SET department_id = 9 WHERE name = 'Isla Brown';
 UPDATE Employee SET department_id = 10 WHERE name = 'Jack Wilson';
 
 -- Finally update departments to assign their heads

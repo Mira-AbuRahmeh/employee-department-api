@@ -1,0 +1,155 @@
+package com.myproject.service;
+
+
+import com.myproject.model.dto.employeeDto.EmployeeAddDto;
+import com.myproject.model.dto.employeeDto.EmployeeResponseDto;
+import com.myproject.model.dto.employeeDto.EmployeeUpdateDto;
+import com.myproject.model.entity.Department;
+import com.myproject.model.entity.Employee;
+import com.myproject.exception.ResourceAlreadyExistException;
+import com.myproject.exception.ResourceNotFoundException;
+import com.myproject.repository.DepartmentRepo;
+import com.myproject.repository.EmployeeRepo;
+import com.myproject.util.EmployeeDtoMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class EmployeeServices {
+
+    private final EmployeeRepo EMPLOYEE_REPO;
+    private final DepartmentRepo DEPARTMENT_REPO;
+
+    @Autowired
+    public EmployeeServices(EmployeeRepo EMPLOYEE_REPO, DepartmentRepo DEPARTMENT_REPO) {
+        this.EMPLOYEE_REPO = EMPLOYEE_REPO;
+        this.DEPARTMENT_REPO = DEPARTMENT_REPO;
+    }
+
+    public void addEmployee(EmployeeAddDto employeeDto) {
+        Optional<Employee> existingEmployee = EMPLOYEE_REPO.findByEmail(employeeDto.getEmail());
+         Department department = DEPARTMENT_REPO.findById(employeeDto.getDepartmentId()).orElseThrow(()->new ResourceNotFoundException("Department","id",String.valueOf(employeeDto.getDepartmentId())));
+        if (existingEmployee.isPresent()){
+           throw new ResourceAlreadyExistException("Employee","email",employeeDto.getEmail());
+        }
+
+        EMPLOYEE_REPO.save(EmployeeDtoMapper.fromEmployeeAddDto(employeeDto,department));
+    }
+
+
+    public EmployeeResponseDto updateEmployee(int id, EmployeeUpdateDto employeeDto) {
+        Optional<Employee> existingEmployee = EMPLOYEE_REPO.findById(id);
+        if(existingEmployee.isPresent()) {
+            Employee employee=existingEmployee.get();
+            if (employeeDto.getName() != null && !employeeDto.getName().isBlank())
+               employee.setName(employeeDto.getName());
+            if (employeeDto.getSalary() != null)
+                employee.setSalary(employeeDto.getSalary());
+            if (employeeDto.getRole() != null)
+                employee.setRole(employeeDto.getRole());
+            if (employeeDto.getDepartment() != null)
+                employee.setDepartment(DEPARTMENT_REPO.findById(employeeDto.getDepartment()).orElseThrow(()->new ResourceNotFoundException("Department","id",String.valueOf(employeeDto.getDepartment()))));
+            if (employeeDto.getEmail() != null && !employeeDto.getEmail().isBlank()){
+                Optional<Employee> employeeWithEmail =EMPLOYEE_REPO.findByEmail(employeeDto.getEmail());
+                if(employeeWithEmail.isPresent()){
+                    throw new ResourceAlreadyExistException("Employee","email",employeeDto.getEmail());
+                }
+                employee.setEmail(employeeDto.getEmail());
+            }
+
+          return EmployeeDtoMapper.toEmployeeResponseDto(EMPLOYEE_REPO.save(employee));
+        }
+        else
+            throw new ResourceNotFoundException("Employee","id",String.valueOf(id));
+
+    }
+
+    public List<EmployeeResponseDto> getAllEmployees() {
+        return EMPLOYEE_REPO.findAll().stream().map(EmployeeDtoMapper::toEmployeeResponseDto).toList();
+    }
+
+    public EmployeeResponseDto getEmployeeById(int id) {
+        Optional<Employee> employee = EMPLOYEE_REPO.findById(id);
+        if(employee.isPresent())
+            return EmployeeDtoMapper.toEmployeeResponseDto(employee.get());
+
+        throw new ResourceNotFoundException("Employee","id",String.valueOf(id));
+    }
+
+    public void deleteEmployeeById(int id) {
+        Optional<Employee> employee = EMPLOYEE_REPO.findById(id);
+        if(employee.isPresent()){
+            Optional<Department> dep= DEPARTMENT_REPO.findByHead(employee.get());
+            if (dep.isPresent()){
+                dep.get().setHead(null);
+                DEPARTMENT_REPO.save(dep.get());
+            }
+         EMPLOYEE_REPO.deleteById(id);
+        }
+
+        else
+         throw new ResourceNotFoundException("Employee","id",String.valueOf(id));
+    }
+
+
+    public List<EmployeeResponseDto> getEmployeesWithSalaryGreaterThanEqual(BigDecimal salary, Sort sort) {
+        return  EMPLOYEE_REPO.findBySalaryGreaterThanEqual(salary,sort).stream().map(EmployeeDtoMapper::toEmployeeResponseDto).toList();
+    }
+
+
+    public List<EmployeeResponseDto> findByDepartmentId(int id, Sort sort) {
+        Optional< Department> department = DEPARTMENT_REPO.findById(id);
+        if(department.isPresent())
+            return EMPLOYEE_REPO.findByDepartment(department.get(),sort).stream().map(EmployeeDtoMapper::toEmployeeResponseDto).toList();
+
+        throw new ResourceNotFoundException("Department","id",String.valueOf(id));
+    }
+
+    public List<EmployeeResponseDto> getEmployeesWithSalaryGreaterThanEqualAndDepartment(BigDecimal salary, int departmentId, Sort sort) {
+        Optional< Department> department = DEPARTMENT_REPO.findById(departmentId);
+        if(department.isPresent())
+            return EMPLOYEE_REPO.findBySalaryGreaterThanEqualAndDepartment(salary, department.get(),sort).stream().map(EmployeeDtoMapper::toEmployeeResponseDto).toList();
+
+        throw new ResourceNotFoundException("Department","id",String.valueOf(departmentId));
+    }
+
+
+
+    public List<EmployeeResponseDto> searchByKeyword(String keyword) {
+        return EMPLOYEE_REPO.findByNameOrEmailLike(keyword).stream().map(EmployeeDtoMapper::toEmployeeResponseDto).toList();
+    }
+
+    public List<EmployeeResponseDto> filterEmployees(Integer departmentID, BigDecimal minSalary, String sortBy, String order) {
+        List<EmployeeResponseDto> filteredList=List.of();
+        Sort sort=null;
+        if(sortBy!=null && !sortBy.isEmpty() ){
+            if(order!=null && order.equalsIgnoreCase("asc"))
+                sort=Sort.by(sortBy).ascending();
+            else
+                sort=Sort.by(sortBy).descending();
+        }
+
+        if(departmentID != null && minSalary != null ){
+            filteredList=this.getEmployeesWithSalaryGreaterThanEqualAndDepartment(minSalary,departmentID,sort);
+        }
+        else if(departmentID != null){
+            filteredList=this.findByDepartmentId(departmentID,sort);
+        }
+        else if(minSalary != null ){
+            filteredList=this.getEmployeesWithSalaryGreaterThanEqual(minSalary,sort);
+        }
+        else if(sort!=null){
+            filteredList=EMPLOYEE_REPO.findAll(sort).stream().map(EmployeeDtoMapper::toEmployeeResponseDto).toList();
+        }
+        return filteredList;
+    }
+
+
+}
+
+
